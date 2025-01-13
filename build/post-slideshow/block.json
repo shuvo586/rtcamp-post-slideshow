@@ -8,12 +8,35 @@
   "icon": "smiley",
   "description": "showcase post slider",
   "example": {},
+  "attributes": {
+    "api": {
+      "type": "string",
+      "default": "https://wptavern.com/wp-json/wp/v2/posts"
+    },
+    "posts": {
+      "type": "number",
+      "default": 10
+    }
+  },
   "supports": {
-    "html": false
+    "html": false,
+    "color": {
+      "background": true,
+      "text": true
+    },
+    "align": [
+      "wide",
+      "full"
+    ],
+    "spacing": {
+      "padding": true,
+      "margin": true
+    }
   },
   "textdomain": "rtc-post-slideshow",
   "editorScript": "file:./index.js",
   "editorStyle": "file:./index.css",
   "style": "file:./style-index.css",
-  "viewScript": "file:./view.js"
+  "viewScript": "file:./view.js",
+  "render": "file:./render.php"
 }

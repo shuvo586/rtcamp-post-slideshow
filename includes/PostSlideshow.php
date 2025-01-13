@@ -18,7 +18,6 @@ final class PostSlideshow {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'post_slideshow_block_init' ] );
-		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
 	}
 
 	/**
@@ -30,19 +29,6 @@ final class PostSlideshow {
 	 */
 	public function post_slideshow_block_init() {
 		register_block_type( RTC_POST_SLIDESHOW_DIR . '/build/post-slideshow' );
-	}
-
-	/**
-	 * Enqueue Styles and Scripts
-	 *
-	 * @return void
-	 */
-	function enqueue_scripts() {
-		wp_enqueue_style( 'rtc-post-slideshow', RTC_POST_SLIDESHOW_ASSETS . '/dist/css/styles.css', '', '1.0.0' );
-		wp_enqueue_script( 'rtc-post-slideshow-ajax', RTC_POST_SLIDESHOW_ASSETS . '/dist/js/script.js', [ 'jquery' ], '1.0.0', true );
-		wp_localize_script( 'rtc-post-slideshow-ajax', 'RtCamp_ajax_object', [
-			'ajax_url' => admin_url( 'admin-ajax.php' )
-		] );
 	}
 
 
