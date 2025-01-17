@@ -1,41 +1,53 @@
-document.addEventListener('DOMContentLoaded', () => {
-	const sliders = document.querySelectorAll('.post-slideshow');
+// JavaScript for carousel control
 
-	sliders.forEach((slider) => {
-		let currentIndex = 0;
-		const slides = slider.querySelectorAll('.post-slide');
-		const totalSlides = slides.length;
+const carouselItems = document.querySelectorAll('.rtc-post-slideshow__item');
+const prevBtn = document.querySelector('.prev');
+const nextBtn = document.querySelector('.next');
+const dots = document.querySelectorAll('.rtc-post-slideshow__dots span');
+let currentSlide = 0;
 
-		const showSlide = (index) => {
-			slides.forEach((slide, i) => {
-				slide.style.display = i === index ? 'block' : 'none';
-			});
-		};
+const updateCarousel = () => {
+	carouselItems.forEach((item, index) => {
+		item.classList.remove('active');
+		if (index === currentSlide) {
+			item.classList.add('active');
+		}
+	});
+	dots.forEach((dot, index) => {
+		dot.classList.remove('active');
+		if (index === currentSlide) {
+			dot.classList.add('active');
+		}
+	});
+};
 
-		const nextSlide = () => {
-			currentIndex = (currentIndex + 1) % totalSlides;
-			showSlide(currentIndex);
-		};
+const prevSlide = () => {
+	currentSlide = (currentSlide - 1 + carouselItems.length) % carouselItems.length;
+	updateCarousel();
+};
 
-		const prevSlide = () => {
-			currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-			showSlide(currentIndex);
-		};
+const nextSlide = () => {
+	currentSlide = (currentSlide + 1) % carouselItems.length;
+	updateCarousel();
+};
 
-		// Initial display
-		showSlide(currentIndex);
+prevBtn.addEventListener('click', prevSlide);
+nextBtn.addEventListener('click', nextSlide);
 
-		// Add event listeners for navigation
-		slider.querySelector('.next-slide').addEventListener('click', nextSlide);
-		slider.querySelector('.prev-slide').addEventListener('click', prevSlide);
-
-		// Keyboard navigation
-		slider.addEventListener('keydown', (event) => {
-			if (event.key === 'ArrowRight') {
-				nextSlide();
-			} else if (event.key === 'ArrowLeft') {
-				prevSlide();
-			}
-		});
+dots.forEach((dot, index) => {
+	dot.addEventListener('click', () => {
+		currentSlide = index;
+		updateCarousel();
 	});
 });
+
+// Keyboard navigation
+document.addEventListener('keydown', (event) => {
+	if (event.key === 'ArrowLeft') {
+		prevSlide();
+	} else if (event.key === 'ArrowRight') {
+		nextSlide();
+	}
+});
+
+updateCarousel();

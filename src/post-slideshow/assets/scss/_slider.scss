@@ -1,0 +1,155 @@
+/**
+ * The following styles get applied inside the editor only.
+ *
+ * Replace them with your own styles or remove the file completely.
+ */
+/* CSS Styling */
+
+.rtc-post-slideshow {
+	&__wrap {
+		position: relative;
+		font-size: 16px;
+	}
+	&__container {
+		overflow: hidden;
+	}
+	&__item {
+		display: none;
+		width: 100%;
+		transition: opacity 0.5s ease-in-out;
+
+		&.active {
+			display: flex;
+			align-items: start;
+			opacity: 1;
+		}
+	}
+	&__content {
+		margin-bottom: 1.875em;
+
+		h2 {
+			font-size: 1.375em;
+			font-weight: 400;
+			margin: 0;
+
+			a {
+				text-decoration: none;
+				color: #191919;
+			}
+		}
+		p {
+			font-size: 1em;
+			line-height: 1.5;
+			margin-top: 0.5em;
+			margin-bottom: 0;
+		}
+	}
+	&__meta {
+		display: flex;
+		gap: 1em;
+		align-items: center;
+		margin-bottom: 0.625em;
+
+		div {
+			position: relative;
+
+			&:after {
+				content: "";
+				position: absolute;
+				width: 2px;
+				height: 2px;
+				border-radius: 2px;
+				background-color: #757575;
+				top: 50%;
+				transform: translateY(-50%);
+				right: -0.625em;
+			}
+
+			&:last-child {
+				&:after {
+					display: none;
+				}
+			}
+		}
+	}
+	&__author {
+		font-size: 0.875em;
+		display: flex;
+		align-items: center;
+		gap: 6px;
+
+		img {
+			width: 1.5em;
+			height: 1.5em;
+			border-radius: 50%;
+		}
+	}
+	&__image {
+		text-align: center;
+
+		img {
+			max-width: 200px;
+			height: auto;
+		}
+	}
+	&__category {
+		color: #007bff;
+		display: flex;
+		gap: 0.25em;
+
+		span {
+			font-size: 0.8125em;
+			line-height: 1.2;
+			color: #292929;
+			padding: 0.25em 0.5em;
+			border-radius: 20rem;
+			background-color: #F2F2F2;
+		}
+	}
+
+	&__date {
+		font-size: 0.8125em;
+		color: #757575;
+	}
+	&__controls {
+		button {
+			position: absolute;
+			top: 50%;
+			transform: translateY(-50%);
+			font-size: 1.375em;
+			color: #c9c9c9;
+			background-color: transparent;
+			border: none;
+			padding: 0.625em;
+			cursor: pointer;
+		}
+		button.prev {
+			left: -3em;
+		}
+		button.next {
+			right: -3em;
+		}
+	}
+
+	&__dots {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		display: flex;
+
+		span {
+			width: 0.25em;
+			height: 0.25em;
+			border-radius: 50%;
+			background-color: #D9D9D9;
+			margin: 0 0.25em;
+			cursor: pointer;
+
+			&.active {
+				background-color: #919191;
+			}
+		}
+
+	}
+}

@@ -2,43 +2,53 @@
 /*!************************************!*\
   !*** ./src/post-slideshow/view.js ***!
   \************************************/
-document.addEventListener('DOMContentLoaded', () => {
-  const sliders = document.querySelectorAll('.post-slideshow');
-  sliders.forEach(slider => {
-    let currentIndex = 0;
-    const slides = slider.querySelectorAll('.post-slide');
-    const totalSlides = slides.length;
-    const showSlide = index => {
-      slides.forEach((slide, i) => {
-        slide.style.display = i === index ? 'block' : 'none';
-      });
-    };
-    const nextSlide = () => {
-      currentIndex = (currentIndex + 1) % totalSlides;
-      showSlide(currentIndex);
-    };
-    const prevSlide = () => {
-      currentIndex = (currentIndex - 1 + totalSlides) % totalSlides;
-      showSlide(currentIndex);
-    };
+// JavaScript for carousel control
 
-    // Initial display
-    showSlide(currentIndex);
-
-    // Add event listeners for navigation
-    slider.querySelector('.next-slide').addEventListener('click', nextSlide);
-    slider.querySelector('.prev-slide').addEventListener('click', prevSlide);
-
-    // Keyboard navigation
-    slider.addEventListener('keydown', event => {
-      if (event.key === 'ArrowRight') {
-        nextSlide();
-      } else if (event.key === 'ArrowLeft') {
-        prevSlide();
-      }
-    });
+const carouselItems = document.querySelectorAll('.rtc-post-slideshow__item');
+const prevBtn = document.querySelector('.prev');
+const nextBtn = document.querySelector('.next');
+const dots = document.querySelectorAll('.rtc-post-slideshow__dots span');
+let currentSlide = 0;
+const updateCarousel = () => {
+  carouselItems.forEach((item, index) => {
+    item.classList.remove('active');
+    if (index === currentSlide) {
+      item.classList.add('active');
+    }
+  });
+  dots.forEach((dot, index) => {
+    dot.classList.remove('active');
+    if (index === currentSlide) {
+      dot.classList.add('active');
+    }
+  });
+};
+const prevSlide = () => {
+  currentSlide = (currentSlide - 1 + carouselItems.length) % carouselItems.length;
+  updateCarousel();
+};
+const nextSlide = () => {
+  currentSlide = (currentSlide + 1) % carouselItems.length;
+  updateCarousel();
+};
+prevBtn.addEventListener('click', prevSlide);
+nextBtn.addEventListener('click', nextSlide);
+dots.forEach((dot, index) => {
+  dot.addEventListener('click', () => {
+    currentSlide = index;
+    updateCarousel();
   });
 });
+
+// Keyboard navigation
+document.addEventListener('keydown', event => {
+  if (event.key === 'ArrowLeft') {
+    prevSlide();
+  } else if (event.key === 'ArrowRight') {
+    nextSlide();
+  }
+});
+updateCarousel();
 /******/ })()
 ;
 //# sourceMappingURL=view.js.map

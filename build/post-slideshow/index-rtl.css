@@ -1,8 +1,8 @@
-/*!******************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/post-slideshow/style.scss ***!
-  \******************************************************************************************************************************************************************************************************************************************************/
+/*!*******************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ./node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[4].use[1]!./node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[4].use[2]!./node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[4].use[3]!./src/post-slideshow/editor.scss ***!
+  \*******************************************************************************************************************************************************************************************************************************************************/
 /**
- * The frontend styles
+ * The editor styles
  */
 /**
  * The following styles get applied inside the editor only.
@@ -63,7 +63,7 @@
   background-color: #757575;
   top: 50%;
   transform: translateY(-50%);
-  right: -0.625em;
+  left: -0.625em;
 }
 .rtc-post-slideshow__meta div:last-child:after {
   display: none;
@@ -115,16 +115,16 @@
   cursor: pointer;
 }
 .rtc-post-slideshow__controls button.prev {
-  left: -3em;
+  right: -3em;
 }
 .rtc-post-slideshow__controls button.next {
-  right: -3em;
+  left: -3em;
 }
 .rtc-post-slideshow__dots {
   position: absolute;
   bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  right: 50%;
+  transform: translateX(50%);
   display: flex;
 }
 .rtc-post-slideshow__dots span {
@@ -138,5 +138,3 @@
 .rtc-post-slideshow__dots span.active {
   background-color: #919191;
 }
-
-/*# sourceMappingURL=style-index.css.map*/
