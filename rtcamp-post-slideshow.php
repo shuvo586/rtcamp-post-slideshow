@@ -68,36 +68,8 @@ if ( file_exists( RTC_POST_SLIDESHOW_DIR . '/vendor/autoload.php' ) ) {
 }
 
 /**
- * Schedule the cron job to update the transient.
- */
-function rtc_schedule_cron() {
-	if ( ! wp_next_scheduled( 'rtc_refresh_post_slideshow' ) ) {
-		wp_schedule_event( time(), 'hourly', 'rtc_refresh_post_slideshow' );
-	}
-}
-add_action( 'wp', 'rtc_schedule_cron' );
-
-/**
  * Clear cron job on plugin deactivation.
  */
-function rtc_clear_cron() {
-	wp_clear_scheduled_hook( 'rtc_refresh_post_slideshow' );
-}
-register_deactivation_hook( __FILE__, 'rtc_clear_cron' );
-
-/**
- * Cron job callback to refresh the transient.
- */
-function rtc_refresh_post_slideshow() {
-	global $wpdb;
-	$transients = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_rtc_post_slideshow_%'" );
-
-	foreach ( $transients as $transient ) {
-		$key = str_replace( '_transient_', '', $transient );
-		delete_transient( $key );
-	}
-}
-add_action( 'rtc_refresh_post_slideshow', 'rtc_refresh_post_slideshow' );
 
 function clear_slideshow_transients( $attributes ) {
 	$transient_key = 'rtc_post_slideshow_' . md5( serialize( $attributes ) );

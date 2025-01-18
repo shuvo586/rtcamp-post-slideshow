@@ -19,8 +19,6 @@ if ( $cached_posts ) {
 	return;
 }
 
-//wp-json/wp/v2/posts
-
 $api           = ! empty( $attributes['api'] ) ? esc_url_raw( stripslashes( $attributes['api'] ) ) : 'https://wptavern.com';
 $posts_to_show = ! empty( $attributes['posts'] ) ? absint( $attributes['posts'] ) : 10;
 
@@ -37,7 +35,6 @@ if ( empty( $posts ) || ! is_array( $posts ) ) {
 }
 
 ob_start();
-
 $dots = '';
 
 ?>
@@ -52,6 +49,11 @@ $dots = '';
 					}
 					?>
 					<div class="rtc-post-slideshow__item <?php echo 0 === $key ? 'active': ''; ?>">
+						<div class="rtc-post-slideshow__image">
+							<a href="<?php echo esc_url( $post['link'] ); ?>">
+								<img src="<?php echo esc_url( $post['jetpack_featured_media_url'] ); ?>" alt="<?php echo esc_attr( $post['title']['rendered'] ); ?>">
+							</a>
+						</div>
 						<div class="rtc-post-slideshow__content">
 							<div class="rtc-post-slideshow__meta">
 								<?php
@@ -77,11 +79,6 @@ $dots = '';
 							<h2><a href="<?php echo esc_url( $post['link'] ); ?>"><?php echo esc_html( $post['title']['rendered'] ); ?></a></h2>
 							<p><?php echo esc_html( wp_trim_words( $post['excerpt']['rendered'], 15 ) ); ?></p>
 						</div>
-						<div class="rtc-post-slideshow__image">
-							<a href="<?php echo esc_url( $post['link'] ); ?>">
-								<img src="<?php echo esc_url( $post['jetpack_featured_media_url'] ); ?>" alt="<?php echo esc_attr( $post['title']['rendered'] ); ?>">
-							</a>
-						</div>
 					</div>
 				<?php endforeach; ?>
 			</div>
@@ -99,6 +96,9 @@ $dots = '';
 <?php
 $html_output = ob_get_clean();
 
-//set_transient( $transient_key, $html_output );
+/**
+ * Store post data in transient for temporary use
+ */
+set_transient( $transient_key, $html_output );
 
 echo $html_output;

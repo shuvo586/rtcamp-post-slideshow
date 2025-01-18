@@ -1,10 +1,4 @@
-/**
- * The following styles get applied inside the editor only.
- *
- * Replace them with your own styles or remove the file completely.
- */
 /* CSS Styling */
-
 .rtc-post-slideshow {
 	&__wrap {
 		position: relative;
@@ -20,6 +14,8 @@
 
 		&.active {
 			display: flex;
+			gap: 30px;
+			flex-direction: column;
 			align-items: start;
 			opacity: 1;
 		}
@@ -88,7 +84,7 @@
 		text-align: center;
 
 		img {
-			max-width: 200px;
+			width: 100%;
 			height: auto;
 		}
 	}
@@ -114,20 +110,22 @@
 	&__controls {
 		button {
 			position: absolute;
-			top: 50%;
-			transform: translateY(-50%);
+			top: unset;
+			bottom: -60px;
+			transform: unset;
 			font-size: 1.375em;
 			color: #c9c9c9;
-			background-color: transparent;
+			background-color: #3e3e3e;
 			border: none;
-			padding: 0.625em;
+			padding: 0.25em 0.625em;
 			cursor: pointer;
-		}
-		button.prev {
-			left: -3em;
-		}
-		button.next {
-			right: -3em;
+
+			&.prev {
+				left: calc(50% - 45px);
+			}
+			&.next {
+				right: calc(50% - 45px);
+			}
 		}
 	}
 
@@ -150,6 +148,36 @@
 				background-color: #919191;
 			}
 		}
+	}
+}
 
+/* If screen size is more than 768px wide */
+@media screen and (min-width: 768px) {
+	.rtc-post-slideshow {
+		&__image {
+			img {
+				width: 200px;
+				max-width: 200px;
+			}
+		}
+		&__item {
+			&.active {
+				flex-direction: row-reverse;
+			}
+		}
+		&__controls {
+			button {
+				top: 50%;
+				transform: translateY(-50%);
+				background-color: transparent;
+
+				&.prev {
+					left: -3em;
+				}
+				&.next {
+					right: -3em;
+				}
+			}
+		}
 	}
 }

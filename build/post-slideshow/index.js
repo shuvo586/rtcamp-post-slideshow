@@ -41,7 +41,11 @@ function Edit({
   const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
   const [currentSlide, setCurrentSlide] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(0);
 
-  // Sanitize API URL
+  /**
+   * Sanitize API url
+   *
+   * @param value
+   */
   const updateApiUrl = value => {
     const sanitizedUrl = value.replace(/\/$/, '');
     setAttributes({
@@ -49,14 +53,24 @@ function Edit({
     });
   };
 
-  // Decode HTML entities
+  /**
+   * Decode HTML entities
+   *
+   * @param str
+   * @returns {*}
+   */
   const decodeEntities = str => {
     const textarea = document.createElement('textarea');
     textarea.innerHTML = str;
     return textarea.value;
   };
 
-  // Fetch author and category data
+  /**
+   * Fetch author and category data
+   *
+   * @param post
+   * @returns {Promise<*|(*&{author: any, categories: Awaited<unknown>[]})>}
+   */
   const fetchAuthorAndCategories = async post => {
     const authorUrl = `${api}/wp-json/wp/v2/users/${post.author}`;
     const categoriesPromises = post.categories.map(catId => fetch(`${api}/wp-json/wp/v2/categories/${catId}`).then(response => response.ok ? response.json() : null));
@@ -74,7 +88,11 @@ function Edit({
     }
   };
 
-  // Fetch posts from the API
+  /**
+   * Fetch posts from API
+   *
+   * @returns {Promise<void>}
+   */
   const fetchPosts = async () => {
     if (!api) {
       setFetchedPosts([]);
@@ -99,18 +117,32 @@ function Edit({
     fetchPosts();
   }, [api, posts]);
 
-  // Carousel navigation logic
+  /**
+   * Carousel right navigation
+   */
   const nextSlide = () => {
     setCurrentSlide(prevSlide => (prevSlide + 1) % fetchedPosts.length);
   };
+
+  /**
+   * Carousel left navigation
+   */
   const prevSlide = () => {
     setCurrentSlide(prevSlide => (prevSlide - 1 + fetchedPosts.length) % fetchedPosts.length);
   };
+
+  /**
+   * Setting current slide
+   *
+   * @param index
+   */
   const jumpToSlide = index => {
     setCurrentSlide(index);
   };
 
-  // Rendering the block editor preview
+  /**
+   * Render block editor preview
+   */
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
     children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
@@ -137,7 +169,13 @@ function Edit({
         className: "rtc-post-slideshow__container",
         children: isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Spinner, {}) : fetchedPosts.length > 0 ? fetchedPosts.map((post, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: `rtc-post-slideshow__item ${index === currentSlide ? 'active' : ''}`,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+            className: "rtc-post-slideshow__image",
+            children: post.jetpack_featured_media_url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+              src: post.jetpack_featured_media_url,
+              alt: decodeEntities(post.title.rendered)
+            }) : null
+          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
             className: "rtc-post-slideshow__content",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
               className: "rtc-post-slideshow__meta",
@@ -163,12 +201,6 @@ function Edit({
             }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
               children: decodeEntities(post.excerpt.rendered.replace(/<[^>]+>/g, ''))
             })]
-          }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
-            className: "rtc-post-slideshow__image",
-            children: post.jetpack_featured_media_url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
-              src: post.jetpack_featured_media_url,
-              alt: decodeEntities(post.title.rendered)
-            }) : null
           })]
         }, post.id)) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
           children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No posts found.', 'rtc-post-slideshow')
@@ -335,7 +367,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"rtcamp/post-slideshow","version":"1.0.0","title":"Post Slideshow","category":"widgets","icon":"smiley","description":"showcase post slider","example":{},"attributes":{"api":{"type":"string","default":"https://wptavern.com/wp-json/wp/v2/posts"},"posts":{"type":"number","default":10}},"supports":{"html":false,"color":{"background":true,"text":true},"align":["wide","full"],"spacing":{"padding":true,"margin":true}},"textdomain":"rtc-post-slideshow","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"rtcamp/post-slideshow","version":"1.0.0","title":"Post Slideshow","category":"widgets","icon":"images-alt","description":"showcase post slider","example":{},"attributes":{"api":{"type":"string","default":"https://wptavern.com/wp-json/wp/v2/posts"},"posts":{"type":"number","default":10}},"supports":{"html":false,"color":{"background":true,"text":true},"align":["wide","full"],"spacing":{"padding":true,"margin":true}},"textdomain":"rtc-post-slideshow","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","render":"file:./render.php"}');
 
 /***/ })
 

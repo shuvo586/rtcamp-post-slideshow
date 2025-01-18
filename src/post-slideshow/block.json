@@ -5,7 +5,7 @@
 	"version": "1.0.0",
 	"title": "Post Slideshow",
 	"category": "widgets",
-	"icon": "smiley",
+	"icon": "images-alt",
 	"description": "showcase post slider",
 	"example": {},
 	"attributes": {

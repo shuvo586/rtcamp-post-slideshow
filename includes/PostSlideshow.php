@@ -18,6 +18,8 @@ final class PostSlideshow {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'post_slideshow_block_init' ] );
+		add_action( 'wp', [ $this, 'schedule_cron' ] );
+		add_action( 'refresh_post_slideshow', [ $this, 'refresh_post_slideshow' ] );
 	}
 
 	/**
@@ -31,6 +33,27 @@ final class PostSlideshow {
 		register_block_type( RTC_POST_SLIDESHOW_DIR . '/build/post-slideshow' );
 	}
 
+	/**
+	 * Schedule the cron job to update the transient.
+	 */
+	function schedule_cron() {
+		if ( ! wp_next_scheduled( 'refresh_post_slideshow' ) ) {
+			wp_schedule_event( time(), 'hourly', 'refresh_post_slideshow' );
+		}
+	}
+
+	/**
+     * Cron job callback to refresh the transient.
+     */
+	function refresh_post_slideshow() {
+		global $wpdb;
+		$transients = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_rtc_post_slideshow_%'" );
+
+		foreach ( $transients as $transient ) {
+			$key = str_replace( '_transient_', '', $transient );
+			delete_transient( $key );
+		}
+	}
 
 	/**
 	 * Register Activation Hook
@@ -46,6 +69,7 @@ final class PostSlideshow {
 	 * @return void
 	 */
 	public static function deactivate() {
+		wp_clear_scheduled_hook( 'rtc_refresh_post_slideshow' );
 	}
 }
 

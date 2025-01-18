@@ -10,20 +10,34 @@ export default function Edit({ attributes, setAttributes }) {
 	const [isLoading, setIsLoading] = useState(false);
 	const [currentSlide, setCurrentSlide] = useState(0);
 
-	// Sanitize API URL
+	/**
+	 * Sanitize API url
+	 *
+	 * @param value
+	 */
 	const updateApiUrl = (value) => {
 		const sanitizedUrl = value.replace(/\/$/, '');
 		setAttributes({ api: sanitizedUrl });
 	};
 
-	// Decode HTML entities
+	/**
+	 * Decode HTML entities
+	 *
+	 * @param str
+	 * @returns {*}
+	 */
 	const decodeEntities = (str) => {
 		const textarea = document.createElement('textarea');
 		textarea.innerHTML = str;
 		return textarea.value;
 	};
 
-	// Fetch author and category data
+	/**
+	 * Fetch author and category data
+	 *
+	 * @param post
+	 * @returns {Promise<*|(*&{author: any, categories: Awaited<unknown>[]})>}
+	 */
 	const fetchAuthorAndCategories = async (post) => {
 		const authorUrl = `${api}/wp-json/wp/v2/users/${post.author}`;
 		const categoriesPromises = post.categories.map((catId) =>
@@ -47,13 +61,16 @@ export default function Edit({ attributes, setAttributes }) {
 		}
 	};
 
-	// Fetch posts from the API
+	/**
+	 * Fetch posts from API
+	 *
+	 * @returns {Promise<void>}
+	 */
 	const fetchPosts = async () => {
 		if (!api) {
 			setFetchedPosts([]);
 			return;
 		}
-
 		setIsLoading(true);
 
 		try {
@@ -76,20 +93,32 @@ export default function Edit({ attributes, setAttributes }) {
 		fetchPosts();
 	}, [api, posts]);
 
-	// Carousel navigation logic
+	/**
+	 * Carousel right navigation
+	 */
 	const nextSlide = () => {
 		setCurrentSlide((prevSlide) => (prevSlide + 1) % fetchedPosts.length);
 	};
 
+	/**
+	 * Carousel left navigation
+	 */
 	const prevSlide = () => {
 		setCurrentSlide((prevSlide) => (prevSlide - 1 + fetchedPosts.length) % fetchedPosts.length);
 	};
 
+	/**
+	 * Setting current slide
+	 *
+	 * @param index
+	 */
 	const jumpToSlide = (index) => {
 		setCurrentSlide(index);
 	};
 
-	// Rendering the block editor preview
+	/**
+	 * Render block editor preview
+	 */
 	return (
 		<div {...useBlockProps()}>
 			<InspectorControls>
@@ -119,6 +148,11 @@ export default function Edit({ attributes, setAttributes }) {
 								key={post.id}
 								className={`rtc-post-slideshow__item ${index === currentSlide ? 'active' : ''}`}
 							>
+								<div className="rtc-post-slideshow__image">
+									{post.jetpack_featured_media_url ? (
+										<img src={post.jetpack_featured_media_url} alt={decodeEntities(post.title.rendered)} />
+									) : null}
+								</div>
 								<div className="rtc-post-slideshow__content">
 									<div className="rtc-post-slideshow__meta">
 										{post.author && post.author.avatar_urls ? (
@@ -141,11 +175,6 @@ export default function Edit({ attributes, setAttributes }) {
 									</div>
 									<h2>{decodeEntities(post.title.rendered)}</h2>
 									<p>{decodeEntities(post.excerpt.rendered.replace(/<[^>]+>/g, ''))}</p>
-								</div>
-								<div className="rtc-post-slideshow__image">
-									{post.jetpack_featured_media_url ? (
-										<img src={post.jetpack_featured_media_url} alt={decodeEntities(post.title.rendered)} />
-									) : null}
 								</div>
 							</div>
 						))
