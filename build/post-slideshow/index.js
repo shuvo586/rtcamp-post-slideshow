@@ -35,10 +35,22 @@ function Edit({
 }) {
   const {
     api,
-    posts
+    posts,
+    enableFeaturedImage,
+    enableTitle,
+    enableExcerpt,
+    excerptWord,
+    enableAuthor,
+    enableCategories,
+    enableDate,
+    sliderEffect,
+    enableDots,
+    enableArrow,
+    enableAutoplay,
+    autoplayDuration
   } = attributes;
-  const [fetchedPosts, setFetchedPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)([]);
   const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
+  const [fetchedPosts, setFetchedPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)([]);
   const [currentSlide, setCurrentSlide] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(0);
 
   /**
@@ -115,7 +127,7 @@ function Edit({
   };
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     fetchPosts();
-  }, [api, posts]);
+  }, [api, posts, enableFeaturedImage, enableTitle, enableExcerpt, excerptWord, enableAuthor, enableCategories, enableDate, sliderEffect, enableDots, enableArrow, enableAutoplay, autoplayDuration]);
 
   /**
    * Carousel right navigation
@@ -145,9 +157,9 @@ function Edit({
    */
   return /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
     ...(0,_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.useBlockProps)(),
-    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
-      children: /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
-        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Slideshow Settings', 'rtc-post-slideshow'),
+    children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_wordpress_block_editor__WEBPACK_IMPORTED_MODULE_1__.InspectorControls, {
+      children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('General Settings', 'rtc-post-slideshow'),
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.TextControl, {
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('API URL', 'rtc-post-slideshow'),
           value: api,
@@ -160,16 +172,154 @@ function Edit({
             posts: value
           }),
           min: 1,
-          max: 20
+          max: 50
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Featured Image', 'rtc-post-slideshow'),
+          help: enableFeaturedImage ? 'Featured Image Enabled.' : 'Featured Image Disabled.',
+          checked: enableFeaturedImage,
+          onChange: value => {
+            setAttributes({
+              enableFeaturedImage: value
+            });
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Post Title', 'rtc-post-slideshow'),
+          help: enableTitle ? 'Title Enabled.' : 'Title Disabled.',
+          checked: enableTitle,
+          onChange: value => {
+            setAttributes({
+              enableTitle: value
+            });
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Excerpt', 'rtc-post-slideshow'),
+          help: enableExcerpt ? 'Excerpt Enabled.' : 'Excerpt Disabled.',
+          checked: enableExcerpt,
+          onChange: value => {
+            setAttributes({
+              enableExcerpt: value
+            });
+          }
+        }), enableExcerpt && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Excerpt Word Number', 'rtc-post-slideshow'),
+          value: excerptWord,
+          onChange: value => setAttributes({
+            excerptWord: value
+          }),
+          min: 1,
+          max: 200
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Author', 'rtc-post-slideshow'),
+          help: enableAuthor ? 'Author Enabled.' : 'Author Disabled.',
+          checked: enableAuthor,
+          onChange: value => {
+            setAttributes({
+              enableAuthor: value
+            });
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Categories', 'rtc-post-slideshow'),
+          help: enableCategories ? 'Categories Enabled.' : 'Categories Disabled.',
+          checked: enableCategories,
+          onChange: value => {
+            setAttributes({
+              enableCategories: value
+            });
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Date', 'rtc-post-slideshow'),
+          help: enableDate ? 'Date Enabled.' : 'Date Disabled.',
+          checked: enableDate,
+          onChange: value => {
+            setAttributes({
+              enableDate: value
+            });
+          }
         })]
-      })
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Slider Settings', 'rtc-post-slideshow'),
+        children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Dots', 'rtc-post-slideshow'),
+          help: enableDots ? 'Dots Enabled.' : 'Dots Disabled.',
+          checked: enableDots,
+          onChange: value => {
+            setAttributes({
+              enableDots: value
+            });
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Arrows', 'rtc-post-slideshow'),
+          help: enableArrow ? 'Arrow Enabled.' : 'Arrow Disabled.',
+          checked: enableArrow,
+          onChange: value => {
+            setAttributes({
+              enableArrow: value
+            });
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
+          __nextHasNoMarginBottom: true,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Enable Autoplay', 'rtc-post-slideshow'),
+          help: enableAutoplay ? 'Autoplay Enabled.' : 'Autoplay Disabled.',
+          checked: enableAutoplay,
+          onChange: value => {
+            setAttributes({
+              enableAutoplay: value
+            });
+          }
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Autoplay Duration (in second)', 'rtc-post-slideshow'),
+          value: autoplayDuration,
+          onChange: value => setAttributes({
+            autoplayDuration: value
+          }),
+          min: 1,
+          max: 20
+        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Slider Effects', 'rtc-post-slideshow'),
+          value: sliderEffect,
+          options: [{
+            label: 'Ease',
+            value: 'ease'
+          }, {
+            label: 'Linear',
+            value: 'linear'
+          }, {
+            label: 'Ease In',
+            value: 'ease-in'
+          }, {
+            label: 'Ease Out',
+            value: 'ease-out'
+          }, {
+            label: 'Ease In Out',
+            value: 'ease-in-out'
+          }, {
+            label: 'Cubic Bezier',
+            value: 'cubic-bezier'
+          }],
+          onChange: value => setAttributes({
+            sliderEffect: value
+          }),
+          __next40pxDefaultSize: true,
+          __nextHasNoMarginBottom: true
+        })]
+      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
+        title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Styling', 'rtc-post-slideshow')
+      })]
     }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
       className: "rtc-post-slideshow__wrap",
       children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "rtc-post-slideshow__container",
         children: isLoading ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.Spinner, {}) : fetchedPosts.length > 0 ? fetchedPosts.map((post, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
           className: `rtc-post-slideshow__item ${index === currentSlide ? 'active' : ''}`,
-          children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+          children: [enableFeaturedImage && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
             className: "rtc-post-slideshow__image",
             children: post.jetpack_featured_media_url ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
               src: post.jetpack_featured_media_url,
@@ -179,33 +329,35 @@ function Edit({
             className: "rtc-post-slideshow__content",
             children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
               className: "rtc-post-slideshow__meta",
-              children: [post.author && post.author.avatar_urls ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
-                className: "rtc-post-slideshow__author",
-                children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
-                  src: post.author.avatar_urls['24'],
-                  alt: post.author.name
-                }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
-                  children: post.author.name
-                })]
-              }) : null, /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              children: [enableAuthor && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.Fragment, {
+                children: post.author && post.author.avatar_urls ? /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+                  className: "rtc-post-slideshow__author",
+                  children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("img", {
+                    src: post.author.avatar_urls['24'],
+                    alt: post.author.name
+                  }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
+                    children: post.author.name
+                  })]
+                }) : null
+              }), enableCategories && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "rtc-post-slideshow__category",
                 children: post.categories.map((cat, i) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
                   children: cat.name
                 }, i))
-              }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+              }), enableDate && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
                 className: "rtc-post-slideshow__date",
                 children: new Date(post.date).toLocaleDateString()
               })]
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
+            }), enableTitle && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("h2", {
               children: decodeEntities(post.title.rendered)
-            }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
+            }), enableExcerpt && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
               children: decodeEntities(post.excerpt.rendered.replace(/<[^>]+>/g, ''))
             })]
           })]
         }, post.id)) : /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("p", {
           children: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('No posts found.', 'rtc-post-slideshow')
         })
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
+      }), enableArrow && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsxs)("div", {
         className: "rtc-post-slideshow__controls",
         children: [/*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("button", {
           className: "prev",
@@ -216,7 +368,7 @@ function Edit({
           onClick: nextSlide,
           children: "\u203A"
         })]
-      }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
+      }), enableDots && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("div", {
         className: "rtc-post-slideshow__dots",
         children: fetchedPosts.map((_, index) => /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)("span", {
           className: `dot ${index === currentSlide ? 'active' : ''}`,
@@ -367,7 +519,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"rtcamp/post-slideshow","version":"1.0.0","title":"Post Slideshow","category":"widgets","icon":"images-alt","description":"showcase post slider","example":{},"attributes":{"api":{"type":"string","default":"https://wptavern.com/wp-json/wp/v2/posts"},"posts":{"type":"number","default":10}},"supports":{"html":false,"color":{"background":true,"text":true},"align":["wide","full"],"spacing":{"padding":true,"margin":true}},"textdomain":"rtc-post-slideshow","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"rtcamp/post-slideshow","version":"1.0.0","title":"Post Slideshow","category":"widgets","icon":"images-alt","description":"showcase post slider","example":{},"attributes":{"api":{"type":"string","default":"https://wptavern.com"},"posts":{"type":"number","default":10},"enableFeaturedImage":{"type":"boolean","default":true},"enableTitle":{"type":"boolean","default":true},"enableExcerpt":{"type":"boolean","default":true},"excerptWord":{"type":"number","default":15},"enableAuthor":{"type":"boolean","default":true},"enableCategories":{"type":"boolean","default":true},"enableDate":{"type":"boolean","default":true},"enableDots":{"type":"boolean","default":true},"enableArrow":{"type":"boolean","default":true},"enableAutoplay":{"type":"boolean","default":true},"autoplayDuration":{"type":"number","default":1},"sliderEffect":{"type":"string","default":"linear"}},"supports":{"html":false,"color":{"background":true,"text":true},"align":["wide","full"],"spacing":{"padding":true,"margin":true}},"textdomain":"rtc-post-slideshow","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","render":"file:./render.php"}');
 
 /***/ })
 

@@ -41,7 +41,8 @@ $dots = '';
 	<div <?php echo get_block_wrapper_attributes(); ?>>
 		<div class="rtc-post-slideshow__wrap">
 			<div class="rtc-post-slideshow__container">
-				<?php foreach ( $posts as $key => $post ) :
+				<?php foreach ( $posts as $key => $post ) {
+
 					if ( 0 === $key ) {
 						$dots .= '<span class="dot active"></span>';
 					} else {
@@ -49,23 +50,29 @@ $dots = '';
 					}
 					?>
 					<div class="rtc-post-slideshow__item <?php echo 0 === $key ? 'active': ''; ?>">
-						<div class="rtc-post-slideshow__image">
-							<a href="<?php echo esc_url( $post['link'] ); ?>">
-								<img src="<?php echo esc_url( $post['jetpack_featured_media_url'] ); ?>" alt="<?php echo esc_attr( $post['title']['rendered'] ); ?>">
-							</a>
-						</div>
+
+						<?php if ( $attributes['enableFeaturedImage'] ) { ?>
+							<div class="rtc-post-slideshow__image">
+								<a href="<?php echo esc_url( $post['link'] ); ?>">
+									<img src="<?php echo esc_url( $post['jetpack_featured_media_url'] ); ?>" alt="<?php echo esc_attr( $post['title']['rendered'] ); ?>">
+								</a>
+							</div>
+						<?php } ?>
+
 						<div class="rtc-post-slideshow__content">
 							<div class="rtc-post-slideshow__meta">
 								<?php
 								$author = json_decode( wp_remote_retrieve_body( wp_remote_get( "{$api}/wp-json/wp/v2/users/{$post['author']}" ) ) );
-								?>
-								<div class="rtc-post-slideshow__author">
-									<img src="<?php echo esc_url( $author->avatar_urls->{24} ); ?>" alt="<?php echo esc_html( $author->name ); ?>">
-									<span><?php echo esc_html( $author->name ); ?></span>
-								</div>
-								<?php
+								if ( $attributes['enableAuthor'] && $author ) { ?>
+									<div class="rtc-post-slideshow__author">
+										<img src="<?php echo esc_url( $author->avatar_urls->{24} ); ?>" alt="<?php echo esc_html( $author->name ); ?>">
+										<span><?php echo esc_html( $author->name ); ?></span>
+									</div>
+									<?php
+								}
+
 								$category_link = '';
-								if ( $post['categories'] ) {
+								if ( $attributes['enableCategories'] && $post['categories'] ) {
 									echo "<div class='rtc-post-slideshow__category'>";
 									foreach ( $post['categories'] as $cat_obj ) {
 										$category = json_decode( wp_remote_retrieve_body( wp_remote_get( "{$api}/wp-json/wp/v2/categories/{$cat_obj}" ) ) );
@@ -73,24 +80,36 @@ $dots = '';
 									}
 									echo "</div>";
 								}
+
+								if ( $attributes['enableTitle'] ) {
+									echo '<div class="rtc-post-slideshow__date">' . esc_html( date( get_option( 'date_format' ), strtotime( $post['date'] ) ) ) . '</div>';
+								}
 								?>
-								<div class="rtc-post-slideshow__date"><?php echo esc_html( date( get_option( 'date_format' ), strtotime( $post['date'] ) ) ); ?></div>
 							</div>
-							<h2><a href="<?php echo esc_url( $post['link'] ); ?>"><?php echo esc_html( $post['title']['rendered'] ); ?></a></h2>
-							<p><?php echo esc_html( wp_trim_words( $post['excerpt']['rendered'], 15 ) ); ?></p>
+
+							<?php if ( $attributes['enableTitle'] ) {
+								echo '<h2><a href="' . esc_url( $post['link'] ) .'">' . esc_html( $post['title']['rendered'] ) . '</a></h2>';
+							}
+
+							if ( $attributes['enableExcerpt'] ) {
+								echo '<p>' . esc_html( wp_trim_words( $post['excerpt']['rendered'], 15 ) ) . '</p>';
+							}
+							?>
 						</div>
 					</div>
-				<?php endforeach; ?>
+				<?php } ?>
 			</div>
-			<div class="rtc-post-slideshow__controls">
-				<button class="prev">&#10094;</button>
-				<button class="next">&#10095;</button>
-			</div>
-			<?php if ( $dots ) : ?>
-				<div class="rtc-post-slideshow__dots">
-					<?php echo $dots; ?>
-				</div>
-			<?php endif; ?>
+
+			<?php
+			if ( $attributes['enableArrow'] ) {
+				echo '<div class="rtc-post-slideshow__controls"><button class="prev">&#10094;</button><button class="next">&#10095;</button></div>';
+			}
+
+			if ( $attributes['enableDots'] && $dots ) {
+				echo '<div class="rtc-post-slideshow__dots">' . $dots . '</div>';
+			}
+
+			?>
 		</div>
 	</div>
 <?php
@@ -99,6 +118,6 @@ $html_output = ob_get_clean();
 /**
  * Store post data in transient for temporary use
  */
-set_transient( $transient_key, $html_output );
+//set_transient( $transient_key, $html_output );
 
 echo $html_output;

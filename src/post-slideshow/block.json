@@ -11,11 +11,59 @@
 	"attributes": {
 		"api": {
 			"type": "string",
-			"default": "https://wptavern.com/wp-json/wp/v2/posts"
+			"default": "https://wptavern.com"
 		},
 		"posts": {
 			"type": "number",
 			"default": 10
+		},
+		"enableFeaturedImage" : {
+			"type": "boolean",
+			"default": true
+		},
+		"enableTitle" : {
+			"type": "boolean",
+			"default": true
+		},
+		"enableExcerpt" : {
+			"type": "boolean",
+			"default": true
+		},
+		"excerptWord" : {
+			"type": "number",
+			"default": 15
+		},
+		"enableAuthor" : {
+			"type": "boolean",
+			"default": true
+		},
+		"enableCategories" : {
+			"type": "boolean",
+			"default": true
+		},
+		"enableDate" : {
+			"type": "boolean",
+			"default": true
+		},
+		"enableDots": {
+			"type": "boolean",
+			"default": true
+		},
+		"enableArrow": {
+			"type": "boolean",
+			"default": true
+		},
+		"enableAutoplay": {
+			"type": "boolean",
+			"default": true
+		},
+		"autoplayDuration": {
+			"type": "number",
+			"default": 1
+		},
+		"sliderEffect": {
+			"type": "string",
+			"default": "linear"
 		}
 	},
 	"supports": {

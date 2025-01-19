@@ -18,6 +18,7 @@ final class PostSlideshow {
 	 */
 	public function __construct() {
 		add_action( 'init', [ $this, 'post_slideshow_block_init' ] );
+		add_action( 'updated_post_meta', [ $this, 'clear_slideshow_transients' ] );
 		add_action( 'wp', [ $this, 'schedule_cron' ] );
 		add_action( 'refresh_post_slideshow', [ $this, 'refresh_post_slideshow' ] );
 	}
@@ -40,6 +41,14 @@ final class PostSlideshow {
 		if ( ! wp_next_scheduled( 'refresh_post_slideshow' ) ) {
 			wp_schedule_event( time(), 'hourly', 'refresh_post_slideshow' );
 		}
+	}
+
+	/**
+	 * Clear cron job on plugin deactivation.
+	 */
+	function clear_slideshow_transients( $attributes ) {
+		$transient_key = 'rtc_post_slideshow_' . md5( serialize( $attributes ) );
+		delete_transient( $transient_key );
 	}
 
 	/**
