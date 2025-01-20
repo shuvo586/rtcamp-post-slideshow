@@ -123,6 +123,6 @@ $html_output = ob_get_clean();
 /**
  * Store post data in transient for temporary use
  */
-//set_transient( $transient_key, $html_output );
+set_transient( $transient_key, $html_output );
 
 echo $html_output;
