@@ -34,12 +34,17 @@ if ( empty( $posts ) || ! is_array( $posts ) ) {
 	return '<p>' . esc_html__( 'No posts found.', 'rtc-post-slideshow' ) . '</p>';
 }
 
+$enable_autoplay = ! empty( $attributes['enableAutoplay'] );
+$autoplay_delay  = ! empty( $attributes['autoplayDelay'] ) ? absint( $attributes['autoplayDelay'] ) * 1000 : 3000;
+
 ob_start();
 $dots = '';
-
 ?>
 	<div <?php echo get_block_wrapper_attributes(); ?>>
-		<div class="rtc-post-slideshow__wrap">
+		<div class="rtc-post-slideshow__wrap"
+			 data-enable-autoplay="<?php echo esc_attr( $enable_autoplay ? 'true' : 'false' ); ?>"
+			 data-autoplay-delay="<?php echo esc_attr( $autoplay_delay ); ?>"
+		>
 			<div class="rtc-post-slideshow__container">
 				<?php foreach ( $posts as $key => $post ) {
 
@@ -49,7 +54,7 @@ $dots = '';
 						$dots .= '<span class="dot"></span>';
 					}
 					?>
-					<div class="rtc-post-slideshow__item <?php echo 0 === $key ? 'active': ''; ?>">
+					<div class="rtc-post-slideshow__item<?php echo 0 === $key ? ' active': '';?>">
 
 						<?php if ( $attributes['enableFeaturedImage'] ) { ?>
 							<div class="rtc-post-slideshow__image">

@@ -44,10 +44,11 @@ function Edit({
     enableCategories,
     enableDate,
     sliderEffect,
+    animationType,
     enableDots,
     enableArrow,
     enableAutoplay,
-    autoplayDuration
+    autoplayDelay
   } = attributes;
   const [isLoading, setIsLoading] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)(false);
   const [fetchedPosts, setFetchedPosts] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useState)([]);
@@ -127,7 +128,7 @@ function Edit({
   };
   (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_3__.useEffect)(() => {
     fetchPosts();
-  }, [api, posts, enableFeaturedImage, enableTitle, enableExcerpt, excerptWord, enableAuthor, enableCategories, enableDate, sliderEffect, enableDots, enableArrow, enableAutoplay, autoplayDuration]);
+  }, [api, posts]);
 
   /**
    * Carousel right navigation
@@ -203,14 +204,6 @@ function Edit({
               enableExcerpt: value
             });
           }
-        }), enableExcerpt && /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Excerpt Word Number', 'rtc-post-slideshow'),
-          value: excerptWord,
-          onChange: value => setAttributes({
-            excerptWord: value
-          }),
-          min: 1,
-          max: 200
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {
           __nextHasNoMarginBottom: true,
           label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Show Author', 'rtc-post-slideshow'),
@@ -275,40 +268,13 @@ function Edit({
             });
           }
         }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.RangeControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Autoplay Duration (in second)', 'rtc-post-slideshow'),
-          value: autoplayDuration,
+          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Autoplay Delay (in second)', 'rtc-post-slideshow'),
+          value: autoplayDelay,
           onChange: value => setAttributes({
-            autoplayDuration: value
+            autoplayDelay: value
           }),
           min: 1,
           max: 20
-        }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {
-          label: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Slider Effects', 'rtc-post-slideshow'),
-          value: sliderEffect,
-          options: [{
-            label: 'Ease',
-            value: 'ease'
-          }, {
-            label: 'Linear',
-            value: 'linear'
-          }, {
-            label: 'Ease In',
-            value: 'ease-in'
-          }, {
-            label: 'Ease Out',
-            value: 'ease-out'
-          }, {
-            label: 'Ease In Out',
-            value: 'ease-in-out'
-          }, {
-            label: 'Cubic Bezier',
-            value: 'cubic-bezier'
-          }],
-          onChange: value => setAttributes({
-            sliderEffect: value
-          }),
-          __next40pxDefaultSize: true,
-          __nextHasNoMarginBottom: true
         })]
       }), /*#__PURE__*/(0,react_jsx_runtime__WEBPACK_IMPORTED_MODULE_5__.jsx)(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__.PanelBody, {
         title: (0,_wordpress_i18n__WEBPACK_IMPORTED_MODULE_0__.__)('Styling', 'rtc-post-slideshow')
@@ -519,7 +485,7 @@ module.exports = window["wp"]["i18n"];
   \***************************************/
 /***/ ((module) => {
 
-module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"rtcamp/post-slideshow","version":"1.0.0","title":"Post Slideshow","category":"widgets","icon":"images-alt","description":"showcase post slider","example":{},"attributes":{"api":{"type":"string","default":"https://wptavern.com"},"posts":{"type":"number","default":10},"enableFeaturedImage":{"type":"boolean","default":true},"enableTitle":{"type":"boolean","default":true},"enableExcerpt":{"type":"boolean","default":true},"excerptWord":{"type":"number","default":15},"enableAuthor":{"type":"boolean","default":true},"enableCategories":{"type":"boolean","default":true},"enableDate":{"type":"boolean","default":true},"enableDots":{"type":"boolean","default":true},"enableArrow":{"type":"boolean","default":true},"enableAutoplay":{"type":"boolean","default":true},"autoplayDuration":{"type":"number","default":1},"sliderEffect":{"type":"string","default":"linear"}},"supports":{"html":false,"color":{"background":true,"text":true},"align":["wide","full"],"spacing":{"padding":true,"margin":true}},"textdomain":"rtc-post-slideshow","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","render":"file:./render.php"}');
+module.exports = /*#__PURE__*/JSON.parse('{"$schema":"https://schemas.wp.org/trunk/block.json","apiVersion":3,"name":"rtcamp/post-slideshow","version":"1.0.0","title":"Post Slideshow","category":"widgets","icon":"images-alt","description":"showcase post slider","example":{},"attributes":{"api":{"type":"string","default":"https://wptavern.com"},"posts":{"type":"number","default":10},"enableFeaturedImage":{"type":"boolean","default":true},"enableTitle":{"type":"boolean","default":true},"enableExcerpt":{"type":"boolean","default":true},"enableAuthor":{"type":"boolean","default":true},"enableCategories":{"type":"boolean","default":true},"enableDate":{"type":"boolean","default":true},"enableDots":{"type":"boolean","default":true},"enableArrow":{"type":"boolean","default":true},"enableAutoplay":{"type":"boolean","default":true},"autoplayDelay":{"type":"number","default":3}},"supports":{"html":false,"color":{"background":true,"text":true},"align":["wide","full"],"spacing":{"padding":true,"margin":true}},"textdomain":"rtc-post-slideshow","editorScript":"file:./index.js","editorStyle":"file:./index.css","style":"file:./style-index.css","viewScript":"file:./view.js","render":"file:./render.php"}');
 
 /***/ })
 

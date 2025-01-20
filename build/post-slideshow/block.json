@@ -29,10 +29,6 @@
       "type": "boolean",
       "default": true
     },
-    "excerptWord": {
-      "type": "number",
-      "default": 15
-    },
     "enableAuthor": {
       "type": "boolean",
       "default": true
@@ -57,13 +53,9 @@
       "type": "boolean",
       "default": true
     },
-    "autoplayDuration": {
+    "autoplayDelay": {
       "type": "number",
-      "default": 1
-    },
-    "sliderEffect": {
-      "type": "string",
-      "default": "linear"
+      "default": 3
     }
   },
   "supports": {

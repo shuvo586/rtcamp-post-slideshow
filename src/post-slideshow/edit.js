@@ -27,10 +27,11 @@ export default function Edit({ attributes, setAttributes }) {
 		enableCategories,
 		enableDate,
 		sliderEffect,
+		animationType,
 		enableDots,
 		enableArrow,
 		enableAutoplay,
-		autoplayDuration,
+		autoplayDelay,
 	} = attributes;
 
 	const [isLoading, setIsLoading] = useState(false);
@@ -118,7 +119,7 @@ export default function Edit({ attributes, setAttributes }) {
 
 	useEffect(() => {
 		fetchPosts();
-	}, [api, posts, enableFeaturedImage, enableTitle, enableExcerpt, excerptWord, enableAuthor, enableCategories, enableDate, sliderEffect, enableDots, enableArrow, enableAutoplay, autoplayDuration ]);
+	}, [ api, posts ]);
 
 	/**
 	 * Carousel right navigation
@@ -202,16 +203,6 @@ export default function Edit({ attributes, setAttributes }) {
 							setAttributes( { enableExcerpt: value } );
 						} }
 					/>
-					{
-						enableExcerpt &&
-						<RangeControl
-							label={__('Excerpt Word Number', 'rtc-post-slideshow')}
-							value={excerptWord}
-							onChange={(value) => setAttributes({ excerptWord: value })}
-							min={1}
-							max={200}
-						/>
-					}
 					<ToggleControl
 						__nextHasNoMarginBottom
 						label={__('Show Author', 'rtc-post-slideshow')}
@@ -293,26 +284,11 @@ export default function Edit({ attributes, setAttributes }) {
 						} }
 					/>
 					<RangeControl
-						label={__('Autoplay Duration (in second)', 'rtc-post-slideshow')}
-						value={autoplayDuration}
-						onChange={(value) => setAttributes({ autoplayDuration: value })}
+						label={__('Autoplay Delay (in second)', 'rtc-post-slideshow')}
+						value={autoplayDelay}
+						onChange={(value) => setAttributes({ autoplayDelay: value })}
 						min={1}
 						max={20}
-					/>
-					<SelectControl
-						label={__('Slider Effects', 'rtc-post-slideshow')}
-						value={ sliderEffect }
-						options={ [
-							{ label: 'Ease', value: 'ease' },
-							{ label: 'Linear', value: 'linear' },
-							{ label: 'Ease In', value: 'ease-in' },
-							{ label: 'Ease Out', value: 'ease-out' },
-							{ label: 'Ease In Out', value: 'ease-in-out' },
-							{ label: 'Cubic Bezier', value: 'cubic-bezier' },
-						] }
-						onChange={ ( value ) => setAttributes( { sliderEffect: value } ) }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 				</PanelBody>
 				<PanelBody title={__('Styling', 'rtc-post-slideshow')}>

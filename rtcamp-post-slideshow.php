@@ -38,7 +38,6 @@ if ( ! defined( 'RTC_POST_SLIDESHOW_ASSETS' ) ) {
 /**
  * Composer autoload
  */
-
 if ( file_exists( RTC_POST_SLIDESHOW_DIR . '/vendor/autoload.php' ) ) {
 
 	require_once __DIR__ . '/vendor/autoload.php';
