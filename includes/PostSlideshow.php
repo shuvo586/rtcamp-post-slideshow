@@ -17,10 +17,10 @@ final class PostSlideshow {
 	 * PostSlideshow Constructor
 	 */
 	public function __construct() {
-		add_action( 'init', [ $this, 'post_slideshow_block_init' ] );
-		add_action( 'updated_post_meta', [ $this, 'clear_slideshow_transients' ] );
-		add_action( 'wp', [ $this, 'schedule_cron' ] );
-		add_action( 'refresh_post_slideshow', [ $this, 'refresh_post_slideshow' ] );
+		add_action( 'init', array( $this, 'post_slideshow_block_init' ) );
+		add_action( 'updated_post_meta', array( $this, 'clear_slideshow_transients' ) );
+		add_action( 'wp', array( $this, 'schedule_cron' ) );
+		add_action( 'refresh_post_slideshow', array( $this, 'refresh_post_slideshow' ) );
 	}
 
 	/**
@@ -47,16 +47,16 @@ final class PostSlideshow {
 	 * Clear cron job on plugin deactivation.
 	 */
 	function clear_slideshow_transients( $attributes ) {
-		$transient_key = 'rtc_post_slideshow_' . md5( serialize( $attributes ) );
+		$transient_key = 'rtc_post_slideshow_' . md5( $attributes );
 		delete_transient( $transient_key );
 	}
 
 	/**
-     * Cron job callback to refresh the transient.
-     */
+	 * Cron job callback to refresh the transient.
+	 */
 	function refresh_post_slideshow() {
 		global $wpdb;
-		$transients = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_rtc_post_slideshow_%'" );
+		$transients = $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '_transient_rtc_post_slideshow_%'" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 
 		foreach ( $transients as $transient ) {
 			$key = str_replace( '_transient_', '', $transient );
@@ -87,8 +87,8 @@ final class PostSlideshow {
  *
  * @return bool|PostSlideshow
  */
-function PostSlideshow() {
+function post_slideshow() {
 	return PostSlideshow::init();
 }
 
-PostSlideshow();
+post_slideshow();

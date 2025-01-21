@@ -11,26 +11,26 @@
  * @package rtcamp-post-slideshow
  */
 
-$transient_key = 'rtc_post_slideshow_' . md5( serialize( $attributes ) );
+$transient_key = 'rtc_post_slideshow_' . md5( $attributes );
 $cached_posts  = get_transient( $transient_key );
 
 if ( $cached_posts ) {
-	echo $cached_posts;
+	echo wp_kses_post( $cached_posts );
 	return;
 }
 
 $api           = ! empty( $attributes['api'] ) ? esc_url_raw( stripslashes( $attributes['api'] ) ) : 'https://wptavern.com';
 $posts_to_show = ! empty( $attributes['posts'] ) ? absint( $attributes['posts'] ) : 10;
 
-$response = wp_remote_get( "{$api}/wp-json/wp/v2/posts?per_page={$posts_to_show}" );
+$response = wp_remote_get( "{$api}/wp-json/wp/v2/posts?per_page={$posts_to_show}" ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
 
 if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
 	return '<p>' . esc_html__( 'Unable to fetch posts.', 'rtc-post-slideshow' ) . '</p>';
 }
 
-$posts = json_decode( wp_remote_retrieve_body( $response ), true );
+$fetched_posts = json_decode( wp_remote_retrieve_body( $response ), true );
 
-if ( empty( $posts ) || ! is_array( $posts ) ) {
+if ( empty( $fetched_posts ) || ! is_array( $fetched_posts ) ) {
 	return '<p>' . esc_html__( 'No posts found.', 'rtc-post-slideshow' ) . '</p>';
 }
 
@@ -40,13 +40,13 @@ $autoplay_delay  = ! empty( $attributes['autoplayDelay'] ) ? absint( $attributes
 ob_start();
 $dots = '';
 ?>
-	<div <?php echo get_block_wrapper_attributes(); ?>>
+	<div <?php echo esc_attr( get_block_wrapper_attributes() ); ?>>
 		<div class="rtc-post-slideshow__wrap"
-			 data-enable-autoplay="<?php echo esc_attr( $enable_autoplay ? 'true' : 'false' ); ?>"
-			 data-autoplay-delay="<?php echo esc_attr( $autoplay_delay ); ?>"
+			data-enable-autoplay="<?php echo esc_attr( $enable_autoplay ? 'true' : 'false' ); ?>"
+			data-autoplay-delay="<?php echo esc_attr( $autoplay_delay ); ?>"
 		>
 			<div class="rtc-post-slideshow__container">
-				<?php foreach ( $posts as $key => $post ) {
+				<?php foreach ( $fetched_posts as $key => $fetched_post ) {
 
 					if ( 0 === $key ) {
 						$dots .= '<span class="dot active"></span>';
@@ -54,12 +54,12 @@ $dots = '';
 						$dots .= '<span class="dot"></span>';
 					}
 					?>
-					<div class="rtc-post-slideshow__item<?php echo 0 === $key ? ' active': '';?>">
+					<div class="rtc-post-slideshow__item<?php echo 0 === $key ? ' active' : '';?>">
 
 						<?php if ( $attributes['enableFeaturedImage'] ) { ?>
 							<div class="rtc-post-slideshow__image">
-								<a href="<?php echo esc_url( $post['link'] ); ?>">
-									<img src="<?php echo esc_url( $post['jetpack_featured_media_url'] ); ?>" alt="<?php echo esc_attr( $post['title']['rendered'] ); ?>">
+								<a href="<?php echo esc_url( $fetched_post['link'] ); ?>">
+									<img src="<?php echo esc_url( $fetched_post['jetpack_featured_media_url'] ); ?>" alt="<?php echo esc_attr( $fetched_post['title']['rendered'] ); ?>">
 								</a>
 							</div>
 						<?php } ?>
@@ -67,37 +67,37 @@ $dots = '';
 						<div class="rtc-post-slideshow__content">
 							<div class="rtc-post-slideshow__meta">
 								<?php
-								$author = json_decode( wp_remote_retrieve_body( wp_remote_get( "{$api}/wp-json/wp/v2/users/{$post['author']}" ) ) );
+								$author = json_decode( wp_remote_retrieve_body( wp_remote_get( "{$api}/wp-json/wp/v2/users/{$fetched_post['author']}" ) ) ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
 								if ( $attributes['enableAuthor'] && $author ) { ?>
 									<div class="rtc-post-slideshow__author">
-										<img src="<?php echo esc_url( $author->avatar_urls->{24} ); ?>" alt="<?php echo esc_html( $author->name ); ?>">
+										<img src="<?php echo esc_url( $author->avatar_urls->{24} ); ?>" alt="<?php echo esc_attr( $author->name ); ?>"> <?php // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get ?>
 										<span><?php echo esc_html( $author->name ); ?></span>
 									</div>
 									<?php
 								}
 
 								$category_link = '';
-								if ( $attributes['enableCategories'] && $post['categories'] ) {
+								if ( $attributes['enableCategories'] && $fetched_post['categories'] ) {
 									echo "<div class='rtc-post-slideshow__category'>";
-									foreach ( $post['categories'] as $cat_obj ) {
-										$category = json_decode( wp_remote_retrieve_body( wp_remote_get( "{$api}/wp-json/wp/v2/categories/{$cat_obj}" ) ) );
-										echo '<span>' . $category->name . '</span>';
+									foreach ( $fetched_post['categories'] as $cat_obj ) {
+										$category = json_decode( wp_remote_retrieve_body( wp_remote_get( "{$api}/wp-json/wp/v2/categories/{$cat_obj}" ) ) ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
+										echo '<span>' . esc_html( $category->name ) . '</span>';
 									}
 									echo "</div>";
 								}
 
 								if ( $attributes['enableTitle'] ) {
-									echo '<div class="rtc-post-slideshow__date">' . esc_html( date( get_option( 'date_format' ), strtotime( $post['date'] ) ) ) . '</div>';
+									echo '<div class="rtc-post-slideshow__date">' . esc_html( gmdate( get_option( 'date_format' ), strtotime( $fetched_post['date'] ) ) ) . '</div>';
 								}
 								?>
 							</div>
 
 							<?php if ( $attributes['enableTitle'] ) {
-								echo '<h2><a href="' . esc_url( $post['link'] ) .'">' . esc_html( $post['title']['rendered'] ) . '</a></h2>';
+								echo '<h2><a href="' . esc_url( $fetched_post['link'] ) .'">' . esc_html( $fetched_post['title']['rendered'] ) . '</a></h2>';
 							}
 
 							if ( $attributes['enableExcerpt'] ) {
-								echo '<p>' . esc_html( wp_trim_words( $post['excerpt']['rendered'], 15 ) ) . '</p>';
+								echo '<p>' . esc_html( wp_trim_words( $fetched_post['excerpt']['rendered'], 15 ) ) . '</p>';
 							}
 							?>
 						</div>
@@ -111,7 +111,7 @@ $dots = '';
 			}
 
 			if ( $attributes['enableDots'] && $dots ) {
-				echo '<div class="rtc-post-slideshow__dots">' . $dots . '</div>';
+				echo '<div class="rtc-post-slideshow__dots">' . wp_kses_post( $dots ) . '</div>';
 			}
 
 			?>
@@ -123,6 +123,6 @@ $html_output = ob_get_clean();
 /**
  * Store post data in transient for temporary use
  */
-//set_transient( $transient_key, $html_output );
+set_transient( $transient_key, $html_output );
 
-echo $html_output;
+echo wp_kses_post( $html_output );

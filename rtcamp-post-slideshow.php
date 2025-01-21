@@ -50,8 +50,8 @@ if ( file_exists( RTC_POST_SLIDESHOW_DIR . '/vendor/autoload.php' ) ) {
 	}
 	add_action( 'plugins_loaded', 'rtcamp_post_slideshow_init' );
 
-	register_activation_hook( RTC_POST_SLIDESHOW_FILE, [ 'RtCamp\PostSlideshow\PostSlideshow', 'activate' ] );
-	register_deactivation_hook( RTC_POST_SLIDESHOW_FILE, [ 'RtCamp\PostSlideshow\PostSlideshow', 'deactivate' ] );
+	register_activation_hook( RTC_POST_SLIDESHOW_FILE, array( 'RtCamp\PostSlideshow\PostSlideshow', 'activate' ) );
+	register_deactivation_hook( RTC_POST_SLIDESHOW_FILE, array( 'RtCamp\PostSlideshow\PostSlideshow', 'deactivate' ) );
 
 } else {
 	add_action(
