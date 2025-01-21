@@ -91,18 +91,23 @@ export default function Edit({ attributes, setAttributes }) {
 	 * @returns {Promise<void>}
 	 */
 	const fetchPosts = async () => {
+		if (!api) {
+			setFetchedPosts([]);
+			return;
+		}
+		setIsLoading(true);
+
 		try {
-			const response = await wp.apiFetch({
-				path: `/wp/v2/block-renderer/rtc-post-slideshow/block?attributes=${encodeURIComponent(
-					JSON.stringify(attributes)
-				)}`,
-			});
-			setRenderedContent(response.rendered);
-		} catch (error) {
-			console.error('Error fetching rendered content:', error);
-			setRenderedContent(
-				'<p>' + __('Unable to load content.', 'rtc-post-slideshow') + '</p>'
-			);
+			const response = await fetch(`${api}/wp-json/wp/v2/posts?per_page=${posts}`);
+			if (!response.ok) {
+				throw new Error('Error fetching posts');
+			}
+
+			const data = await response.json();
+			const enrichedPosts = await Promise.all(data.map(fetchAuthorAndCategories));
+			setFetchedPosts(enrichedPosts);
+		} catch {
+			setFetchedPosts([]);
 		} finally {
 			setIsLoading(false);
 		}
