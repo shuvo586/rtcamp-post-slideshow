@@ -20,6 +20,7 @@ final class PostSlideshow {
 		add_action( 'init', array( $this, 'post_slideshow_block_init' ) );
 		add_action( 'updated_post_meta', array( $this, 'clear_slideshow_transients' ) );
 		add_action( 'wp', array( $this, 'schedule_cron' ) );
+		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ) );
 		add_action( 'refresh_post_slideshow', array( $this, 'refresh_post_slideshow' ) );
 	}
 
@@ -62,6 +63,15 @@ final class PostSlideshow {
 			$key = str_replace( '_transient_', '', $transient );
 			delete_transient( $key );
 		}
+	}
+
+	/**
+	 * Initialize Rest API for Employee list
+	 *
+	 * @return void
+	 */
+	public function register_rest_routes() {
+		RestRoute::init();
 	}
 
 	/**

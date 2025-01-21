@@ -1,4 +1,5 @@
 import { __ } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import {
 	PanelBody,
@@ -63,26 +64,24 @@ export default function Edit({ attributes, setAttributes }) {
 	 * @returns {Promise<*|(*&{author: any, categories: Awaited<unknown>[]})>}
 	 */
 	const fetchAuthorAndCategories = async (post) => {
-		const authorUrl = `${api}/wp-json/wp/v2/users/${post.author}`;
+
+		const author = await apiFetch({
+			path: `/rtc-post-slideshow/v1/fetch-author?api_url=${encodeURIComponent(api)}&author=${post.author}`,
+		});
+
 		const categoriesPromises = post.categories.map((catId) =>
-			fetch(`${api}/wp-json/wp/v2/categories/${catId}`).then((response) =>
-				response.ok ? response.json() : null
-			)
+			apiFetch({
+				path: `/rtc-post-slideshow/v1/fetch-category?api_url=${encodeURIComponent(api)}&category=${catId}`,
+			})
 		);
 
-		try {
-			const authorResponse = await fetch(authorUrl);
-			const author = authorResponse.ok ? await authorResponse.json() : null;
-			const categories = (await Promise.all(categoriesPromises)).filter(Boolean);
+		const categories = (await Promise.all(categoriesPromises)).filter(Boolean);
 
-			return {
-				...post,
-				author,
-				categories,
-			};
-		} catch {
-			return post;
-		}
+		return {
+			...post,
+			author,
+			categories,
+		};
 	};
 
 	/**
@@ -98,16 +97,13 @@ export default function Edit({ attributes, setAttributes }) {
 		setIsLoading(true);
 
 		try {
-			const response = await fetch(`${api}/wp-json/wp/v2/posts?per_page=${posts}`);
-			if (!response.ok) {
-				throw new Error('Error fetching posts');
-			}
-
-			const data = await response.json();
-			const enrichedPosts = await Promise.all(data.map(fetchAuthorAndCategories));
+			const response = await apiFetch({
+				path: `/rtc-post-slideshow/v1/fetch-posts?api_url=${encodeURIComponent(api)}&posts=${posts || 5}`,
+			});
+			const enrichedPosts = await Promise.all(response.map(fetchAuthorAndCategories));
 			setFetchedPosts(enrichedPosts);
-		} catch {
-			setFetchedPosts([]);
+		} catch (error) {
+			console.error('Error fetching posts:', error);
 		} finally {
 			setIsLoading(false);
 		}
