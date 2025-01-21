@@ -291,16 +291,13 @@ export default function Edit({ attributes, setAttributes }) {
 						max={20}
 					/>
 				</PanelBody>
-				<PanelBody title={__('Styling', 'rtc-post-slideshow')}>
-
-				</PanelBody>
 			</InspectorControls>
-			<div className="rtc-post-slideshow__wrap">
-				<div className="rtc-post-slideshow__container">
-					{isLoading ? (
-						<Spinner />
-					) : fetchedPosts.length > 0 ? (
-						fetchedPosts.map((post, index) => (
+				{isLoading ? (
+					<Spinner />
+				) : fetchedPosts.length > 0 ? (
+					<div className="rtc-post-slideshow__wrap">
+						<div className="rtc-post-slideshow__container">
+						{fetchedPosts.map((post, index) => (
 							<div
 								key={post.id}
 								className={`rtc-post-slideshow__item ${index === currentSlide ? 'active' : ''}`}
@@ -350,37 +347,37 @@ export default function Edit({ attributes, setAttributes }) {
 									{ enableExcerpt && <p>{decodeEntities(post.excerpt.rendered.replace(/<[^>]+>/g, ''))}</p> }
 								</div>
 							</div>
-						))
-					) : (
-						<p>{__('No posts found.', 'rtc-post-slideshow')}</p>
-					)}
-				</div>
-				{
-					enableArrow &&
-					<div className="rtc-post-slideshow__controls">
-						<button className="prev" onClick={prevSlide}>
-							&#8249;
-						</button>
-						<button className="next" onClick={nextSlide}>
-							&#8250;
-						</button>
-					</div>
-				}
-
-				{
-					enableDots &&
-					<div className="rtc-post-slideshow__dots">
-						{fetchedPosts.map((_, index) => (
-							<span
-								key={index}
-								className={`dot ${index === currentSlide ? 'active' : ''}`}
-								onClick={() => jumpToSlide(index)}
-							></span>
 						))}
-					</div>
-				}
+						</div>
+						{
+							enableArrow &&
+							<div className="rtc-post-slideshow__controls">
+								<button className="prev" onClick={prevSlide}>
+									&#8249;
+								</button>
+								<button className="next" onClick={nextSlide}>
+									&#8250;
+								</button>
+							</div>
+						}
 
-			</div>
+						{
+							enableDots &&
+							<div className="rtc-post-slideshow__dots">
+								{fetchedPosts.map((_, index) => (
+									<span
+										key={index}
+										className={`dot ${index === currentSlide ? 'active' : ''}`}
+										onClick={() => jumpToSlide(index)}
+									></span>
+								))}
+							</div>
+						}
+
+					</div>
+				) : (
+					<p>{__('No posts found.', 'rtc-post-slideshow')}</p>
+				)}
 		</div>
 	);
 }

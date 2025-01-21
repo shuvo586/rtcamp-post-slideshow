@@ -47,7 +47,7 @@ final class PostSlideshow {
 	 * Clear cron job on plugin deactivation.
 	 */
 	function clear_slideshow_transients( $attributes ) {
-		$transient_key = 'rtc_post_slideshow_' . md5( $attributes );
+		$transient_key = 'rtc_post_slideshow_' . md5( serialize( $attributes ) );
 		delete_transient( $transient_key );
 	}
 

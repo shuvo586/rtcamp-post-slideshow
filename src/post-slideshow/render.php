@@ -11,7 +11,7 @@
  * @package rtcamp-post-slideshow
  */
 
-$transient_key = 'rtc_post_slideshow_' . md5( $attributes );
+$transient_key = 'rtc_post_slideshow_' . md5( serialize( $attributes ) );
 $cached_posts  = get_transient( $transient_key );
 
 if ( $cached_posts ) {
