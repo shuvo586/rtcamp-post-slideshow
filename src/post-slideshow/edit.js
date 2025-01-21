@@ -3,7 +3,6 @@ import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
 import {
 	PanelBody,
 	TextControl,
-	SelectControl,
 	RangeControl,
 	Spinner,
 	ToggleControl
@@ -22,12 +21,9 @@ export default function Edit({ attributes, setAttributes }) {
 		enableFeaturedImage,
 		enableTitle,
 		enableExcerpt,
-		excerptWord,
 		enableAuthor,
 		enableCategories,
 		enableDate,
-		sliderEffect,
-		animationType,
 		enableDots,
 		enableArrow,
 		enableAutoplay,
@@ -95,23 +91,18 @@ export default function Edit({ attributes, setAttributes }) {
 	 * @returns {Promise<void>}
 	 */
 	const fetchPosts = async () => {
-		if (!api) {
-			setFetchedPosts([]);
-			return;
-		}
-		setIsLoading(true);
-
 		try {
-			const response = await fetch(`${api}/wp-json/wp/v2/posts?per_page=${posts}`);
-			if (!response.ok) {
-				throw new Error('Error fetching posts');
-			}
-
-			const data = await response.json();
-			const enrichedPosts = await Promise.all(data.map(fetchAuthorAndCategories));
-			setFetchedPosts(enrichedPosts);
-		} catch {
-			setFetchedPosts([]);
+			const response = await wp.apiFetch({
+				path: `/wp/v2/block-renderer/rtc-post-slideshow/block?attributes=${encodeURIComponent(
+					JSON.stringify(attributes)
+				)}`,
+			});
+			setRenderedContent(response.rendered);
+		} catch (error) {
+			console.error('Error fetching rendered content:', error);
+			setRenderedContent(
+				'<p>' + __('Unable to load content.', 'rtc-post-slideshow') + '</p>'
+			);
 		} finally {
 			setIsLoading(false);
 		}
@@ -292,92 +283,93 @@ export default function Edit({ attributes, setAttributes }) {
 					/>
 				</PanelBody>
 			</InspectorControls>
-				{isLoading ? (
-					<Spinner />
-				) : fetchedPosts.length > 0 ? (
-					<div className="rtc-post-slideshow__wrap">
-						<div className="rtc-post-slideshow__container">
-						{fetchedPosts.map((post, index) => (
-							<div
-								key={post.id}
-								className={`rtc-post-slideshow__item ${index === currentSlide ? 'active' : ''}`}
-							>
-								{
-									enableFeaturedImage &&
-									<div className="rtc-post-slideshow__image">
-										{post.jetpack_featured_media_url ? (
-											<img src={post.jetpack_featured_media_url} alt={decodeEntities(post.title.rendered)} />
-										) : null}
-									</div>
-								}
-								<div className="rtc-post-slideshow__content">
-									<div className="rtc-post-slideshow__meta">
-										{
-											enableAuthor &&
-											<>
-												{ post.author && post.author.avatar_urls ? (
-													<div className="rtc-post-slideshow__author">
-														<img
-															src={post.author.avatar_urls['24']}
-															alt={post.author.name}
-														/>
-														<span>{post.author.name}</span>
-													</div>
-												) : null }
-											</>
-										}
 
-										{
-											enableCategories &&
-											<div className="rtc-post-slideshow__category">
-												{post.categories.map((cat, i) => (
-													<span key={i}>{cat.name}</span>
-												))}
-											</div>
-										}
-
-										{
-											enableDate &&
-											<div className="rtc-post-slideshow__date">
-												{new Date(post.date).toLocaleDateString()}
-											</div>
-										}
-									</div>
-									{ enableTitle && <h2>{decodeEntities(post.title.rendered)}</h2> }
-									{ enableExcerpt && <p>{decodeEntities(post.excerpt.rendered.replace(/<[^>]+>/g, ''))}</p> }
+			{isLoading ? (
+				<Spinner />
+			) : fetchedPosts.length > 0 ? (
+				<div className="rtc-post-slideshow__wrap">
+					<div className="rtc-post-slideshow__container">
+					{fetchedPosts.map((post, index) => (
+						<div
+							key={post.id}
+							className={`rtc-post-slideshow__item ${index === currentSlide ? 'active' : ''}`}
+						>
+							{
+								enableFeaturedImage &&
+								<div className="rtc-post-slideshow__image">
+									{post.jetpack_featured_media_url ? (
+										<img src={post.jetpack_featured_media_url} alt={decodeEntities(post.title.rendered)} />
+									) : null}
 								</div>
+							}
+							<div className="rtc-post-slideshow__content">
+								<div className="rtc-post-slideshow__meta">
+									{
+										enableAuthor &&
+										<>
+											{ post.author && post.author.avatar_urls ? (
+												<div className="rtc-post-slideshow__author">
+													<img
+														src={post.author.avatar_urls['24']}
+														alt={post.author.name}
+													/>
+													<span>{post.author.name}</span>
+												</div>
+											) : null }
+										</>
+									}
+
+									{
+										enableCategories &&
+										<div className="rtc-post-slideshow__category">
+											{post.categories.map((cat, i) => (
+												<span key={i}>{cat.name}</span>
+											))}
+										</div>
+									}
+
+									{
+										enableDate &&
+										<div className="rtc-post-slideshow__date">
+											{new Date(post.date).toLocaleDateString()}
+										</div>
+									}
+								</div>
+								{ enableTitle && <h2>{decodeEntities(post.title.rendered)}</h2> }
+								{ enableExcerpt && <p>{decodeEntities(post.excerpt.rendered.replace(/<[^>]+>/g, ''))}</p> }
 							</div>
-						))}
 						</div>
-						{
-							enableArrow &&
-							<div className="rtc-post-slideshow__controls">
-								<button className="prev" onClick={prevSlide}>
-									&#8249;
-								</button>
-								<button className="next" onClick={nextSlide}>
-									&#8250;
-								</button>
-							</div>
-						}
-
-						{
-							enableDots &&
-							<div className="rtc-post-slideshow__dots">
-								{fetchedPosts.map((_, index) => (
-									<span
-										key={index}
-										className={`dot ${index === currentSlide ? 'active' : ''}`}
-										onClick={() => jumpToSlide(index)}
-									></span>
-								))}
-							</div>
-						}
-
+					))}
 					</div>
-				) : (
-					<p>{__('No posts found.', 'rtc-post-slideshow')}</p>
-				)}
+					{
+						enableArrow &&
+						<div className="rtc-post-slideshow__controls">
+							<button className="prev" onClick={prevSlide}>
+								&#8249;
+							</button>
+							<button className="next" onClick={nextSlide}>
+								&#8250;
+							</button>
+						</div>
+					}
+
+					{
+						enableDots &&
+						<div className="rtc-post-slideshow__dots">
+							{fetchedPosts.map((_, index) => (
+								<span
+									key={index}
+									className={`dot ${index === currentSlide ? 'active' : ''}`}
+									onClick={() => jumpToSlide(index)}
+								></span>
+							))}
+						</div>
+					}
+
+				</div>
+			) : (
+				<p>{__('No posts found.', 'rtc-post-slideshow')}</p>
+			)}
 		</div>
 	);
 }
