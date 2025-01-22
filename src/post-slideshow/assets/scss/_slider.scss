@@ -108,10 +108,12 @@
 		color: #757575;
 	}
 	&__controls {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		gap: 0.625em;
 		button {
-			position: absolute;
-			top: unset;
-			bottom: -60px;
+			position: relative;
 			transform: unset;
 			font-size: 1.375em;
 			color: #c9c9c9;
@@ -119,19 +121,12 @@
 			border: none;
 			padding: 0.25em 0.625em;
 			cursor: pointer;
-
-			&.prev {
-				left: calc(50% - 45px);
-			}
-			&.next {
-				right: calc(50% - 45px);
-			}
 		}
 	}
 
 	&__dots {
 		position: absolute;
-		bottom: 0;
+		bottom: -40px;
 		left: 50%;
 		transform: translateX(-50%);
 		display: flex;
@@ -167,6 +162,8 @@
 		}
 		&__controls {
 			button {
+				position: absolute;
+				bottom: -60px;
 				top: 50%;
 				transform: translateY(-50%);
 				background-color: transparent;
@@ -178,6 +175,9 @@
 					right: -3em;
 				}
 			}
+		}
+		&__dots {
+			bottom: 0;
 		}
 	}
 }

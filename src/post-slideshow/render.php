@@ -22,7 +22,13 @@ if ( $cached_posts ) {
 $api           = ! empty( $attributes['api'] ) ? esc_url_raw( stripslashes( $attributes['api'] ) ) : 'https://wptavern.com';
 $posts_to_show = ! empty( $attributes['posts'] ) ? absint( $attributes['posts'] ) : 10;
 
-$response = wp_remote_get( "{$api}/wp-json/wp/v2/posts?per_page={$posts_to_show}" ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
+$response = wp_remote_get( add_query_arg( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
+	[
+		'api_url' => $api,
+		'posts'   => $posts_to_show,
+	],
+	rest_url( 'rtc-post-slideshow/v1/fetch-posts' )
+) );
 
 if ( is_wp_error( $response ) || wp_remote_retrieve_response_code( $response ) !== 200 ) {
 	return '<p>' . esc_html__( 'Unable to fetch posts.', 'rtc-post-slideshow' ) . '</p>';
@@ -68,6 +74,7 @@ $dots = '';
 							<div class="rtc-post-slideshow__meta">
 								<?php
 								$author = json_decode( wp_remote_retrieve_body( wp_remote_get( "{$api}/wp-json/wp/v2/users/{$fetched_post['author']}" ) ) ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get
+
 								if ( $attributes['enableAuthor'] && $author ) { ?>
 									<div class="rtc-post-slideshow__author">
 										<img src="<?php echo esc_url( $author->avatar_urls->{24} ); ?>" alt="<?php echo esc_attr( $author->name ); ?>"> <?php // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_remote_get_wp_remote_get ?>
